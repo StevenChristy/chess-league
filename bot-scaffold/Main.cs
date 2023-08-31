@@ -10,6 +10,7 @@ while (true)
 {
 	// Read current position as fen from stdin.
 	string fen = Console.ReadLine();
+	if (fen=="quit") break;
 	ChessChallenge.Chess.Board chessBoard = new();
 	chessBoard.LoadPosition(fen);
 	ChessChallenge.API.Board apiBoard = new(chessBoard);

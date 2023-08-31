@@ -4,7 +4,7 @@ import { mkdir } from "node:fs/promises";
 import { ok as assert } from "node:assert";
 import { dirname } from "node:path";
 import { sql } from "./db";
-import { makeTmpDir } from "./utils";
+import { makeTmpDir,delay } from "./utils";
 import rawfenstxt from "../fens.txt";
 
 export async function getElo(botId: number): Promise<number> {
@@ -235,9 +235,16 @@ export class Arena {
       clearTimeout(this.moveTimeoutId);
       this.moveTimeoutId = null;
     }
+	
+	this.bots.w.proc.stdin.write('quit\nquit\n');
+	this.bots.w.proc.stdin.flush();
+	this.bots.b.proc.stdin.write('quit\nquit\n');
+	this.bots.b.proc.stdin.flush();
+	
+	await delay(1000);
 
-    await Bun.spawn(["pkill", "-P", String(this.bots.w.proc.pid)]).exited;
-    await Bun.spawn(["pkill", "-P", String(this.bots.b.proc.pid)]).exited;
+    //await Bun.spawn(["pkill", "-P", String(this.bots.w.proc.pid)]).exited;
+    //await Bun.spawn(["pkill", "-P", String(this.bots.b.proc.pid)]).exited;
 
     // this.bots.w.proc.kill(9);
     // this.bots.b.proc.kill(9);
