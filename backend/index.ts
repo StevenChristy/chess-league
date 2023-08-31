@@ -87,7 +87,7 @@ app.post("/login/", async (c) => {
 
   const token = randomBytes(32).toString("base64url");
   await sql`INSERT INTO dev_tokens (dev_id, token) VALUES (${id}, ${token})`;
-  return c.text(`https://chess.stjo.dev/login/${token}/`, 200);
+  return c.redirect(`/login/${token}/`);
 });
 
 app.get("/login/:token/", async c => {
