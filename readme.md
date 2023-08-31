@@ -1,5 +1,5 @@
 # Intro
-TODO
+WARNING: This fork was modified for internal use removing the email verification.
 
 # Setup
 ## External dependencies
