@@ -4,7 +4,6 @@ import { serveStatic } from "hono/bun";
 
 import { compile } from "./compile";
 import { sql, setupDatabase } from "./db";
-import { sendEmail } from "./email";
 import { randomBytes } from "crypto";
 
 const app = new Hono();
@@ -88,17 +87,7 @@ app.post("/login/", async (c) => {
 
   const token = randomBytes(32).toString("base64url");
   await sql`INSERT INTO dev_tokens (dev_id, token) VALUES (${id}, ${token})`;
-  const emailBody =
-`Hi ${name},
-Someone submitted your email address as a developer in the Tiny Chess League. If this was you, click the link below to log in:
-https://chess.stjo.dev/login/${token}/
-
-Do not send this link to anybody!
-
-If this was not you, you can ignore this email.
-`;
-  await sendEmail("Login link for Tiny Chess League", emailBody, body.email);
-  return c.text('Link sent, please check your inbox.', 200);
+  return c.text(`https://chess.stjo.dev/login/${token}/`, 200);
 });
 
 app.get("/login/:token/", async c => {
